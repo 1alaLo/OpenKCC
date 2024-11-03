@@ -190,11 +190,11 @@ namespace nickmaltbie.OpenKCC.Tests.PlayMode.Utils
             bool canPush = !isKinematic && rigidbody != null && pushable.GetComponent<Pushable>() != null;
             if (canPush && rigidbody != null)
             {
-                Assert.IsTrue(rigidbody.velocity.magnitude >= 0, $"Expected box to have some added force");
+                Assert.IsTrue(rigidbody.linearVelocity.magnitude >= 0, $"Expected box to have some added force");
             }
             else if (rigidbody != null)
             {
-                Assert.IsTrue(rigidbody.velocity.magnitude == 0, $"Expected box to not have any added force");
+                Assert.IsTrue(rigidbody.linearVelocity.magnitude == 0, $"Expected box to not have any added force");
             }
         }
 
@@ -237,9 +237,10 @@ namespace nickmaltbie.OpenKCC.Tests.PlayMode.Utils
         [UnityTest]
         public IEnumerator TestKCCMovementJitterOnAngle([NUnit.Framework.Range(15, 179, 15)] float angle, [Values(10, 20)] float wallLength)
         {
+            //FirstVertex or FirstVertex
             // Setup a wall at the given angle
-            ProBuilderMesh angledWall1 = ShapeGenerator.GenerateCube(PivotLocation.FirstCorner, new Vector3(0.1f, 2, wallLength));
-            ProBuilderMesh angledWall2 = ShapeGenerator.GenerateCube(PivotLocation.FirstCorner, new Vector3(0.1f, 2, wallLength));
+            ProBuilderMesh angledWall1 = ShapeGenerator.GenerateCube(PivotLocation.FirstVertex, new Vector3(0.1f, 2, wallLength));
+            ProBuilderMesh angledWall2 = ShapeGenerator.GenerateCube(PivotLocation.FirstVertex, new Vector3(0.1f, 2, wallLength));
 
             angledWall1.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Standard"));
             angledWall2.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Standard"));
@@ -359,14 +360,14 @@ namespace nickmaltbie.OpenKCC.Tests.PlayMode.Utils
             // Create stair object for player to walk into
             // Position stairs 1 units ahead of the player and centered
             var size = new Vector3(width, stepHeight * numSteps, stepDepth * numSteps);
-            ProBuilderMesh stairBuilder = ShapeGenerator.GenerateStair(PivotLocation.FirstCorner, size, numSteps, false);
+            ProBuilderMesh stairBuilder = ShapeGenerator.GenerateStair(PivotLocation.FirstVertex, size, numSteps, false);
             stairBuilder.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Standard"));
             stairBuilder.transform.position = Vector3.forward + Vector3.left * width / 2;
             stairBuilder.gameObject.AddComponent<MeshCollider>();
             RegisterGameObject(stairBuilder.gameObject);
 
             // Put a small platform after the stairs
-            ProBuilderMesh platform = ShapeGenerator.GeneratePlane(PivotLocation.FirstCorner, 5, width, 1, 1, Axis.Up);
+            ProBuilderMesh platform = ShapeGenerator.GeneratePlane(PivotLocation.FirstVertex, 5, width, 1, 1, Axis.Up);
             platform.transform.position = stairBuilder.transform.position + new Vector3(0, size.y, size.z);
             platform.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Standard"));
             platform.gameObject.AddComponent<MeshCollider>();
